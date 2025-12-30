@@ -1,6 +1,7 @@
 from logging import addLevelName
 
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
+
 
 class LoginPage:
 
@@ -26,6 +27,14 @@ class LoginPage:
         self.page.locator('div.toast').is_visible()
         toast_message = self.page.locator('div.toast').inner_text()
         return toast_message
+
+    def upload_file(self):
+        self.page.set_input_files("#file-upload", "tests/files/Plik 8.pdf")
+        self.page.get_by_role('button', name='Upload').click()
+        message = self.page.locator('#upload-result')
+        expect(message).to_be_visible(timeout=5000)
+        self.page.locator('#upload-result')
+        return message
 
 
 

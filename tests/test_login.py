@@ -1,4 +1,5 @@
 import pytest
+from playwright.sync_api import expect
 
 from pages.login_page import LoginPage
 
@@ -15,3 +16,8 @@ def test_select_option(login_page: LoginPage):
     login_page.open()
     toast_message = login_page.select_option()
     assert toast_message == 'Selected: Option 2'
+
+def test_upload_file(login_page: LoginPage):
+    login_page.open()
+    message = login_page.upload_file()
+    assert 'uploaded successfully!' in message.inner_text()
