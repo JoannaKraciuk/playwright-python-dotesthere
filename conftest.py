@@ -26,7 +26,7 @@ def _pw():
 @pytest.fixture(scope="session")
 def browser(_pw, pytestconfig):
     headed = pytestconfig.getoption("--headed")
-    b = _pw.chromium.launch(headless=not headed)  # headed=True => headless=False
+    b = _pw.chromium.launch(headless=not headed, slow_mo=800)  # headed=True => headless=False
     yield b
     b.close()
 

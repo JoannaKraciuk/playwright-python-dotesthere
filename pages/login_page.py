@@ -19,4 +19,13 @@ class LoginPage:
         alert_message = self.page.locator('#flash-message')
         return alert_message.inner_text()
 
+    def select_option(self):
+        self.page.locator('#dropdown').wait_for(state='visible')
+        self.page.locator('#dropdown').click()
+        self.page.select_option('#dropdown', label='Option 2')
+        self.page.locator('div.toast').is_visible()
+        toast_message = self.page.locator('div.toast').inner_text()
+        return toast_message
+
+
 
