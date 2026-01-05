@@ -1,18 +1,8 @@
-
-# conftest.py
 import os
 import pytest
+
 from playwright.sync_api import sync_playwright
 from pages.login_page import LoginPage
-
-# >>> DODAJ TO: rejestracja własnej flagi --headed
-def pytest_addoption(parser):
-    parser.addoption(
-        "--headed",
-        action="store_true",
-        default=False,
-        help="Run browser in headed mode (show window)"
-    )
 
 @pytest.fixture(scope="session")
 def base_url():
@@ -26,7 +16,7 @@ def _pw():
 @pytest.fixture(scope="session")
 def browser(_pw, pytestconfig):
     headed = pytestconfig.getoption("--headed")
-    b = _pw.chromium.launch(headless=not headed, slow_mo=800)  # headed=True => headless=False
+    b = _pw.chromium.launch(headless=False, slow_mo=800)  # headed=True => headless=False
     yield b
     b.close()
 
