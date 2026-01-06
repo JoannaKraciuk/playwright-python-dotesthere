@@ -7,9 +7,10 @@ from datetime import datetime
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 URL_RE = re.compile(r"^https?://[^\s]+$")
+ISO_Z_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$")
 
 
-@pytest.mark.smoke
+@pytest.mark.api
 def test_get_users_ok(api_base_url):
     url = f"{api_base_url}/users?page=1&limit=10"
 
@@ -43,7 +44,7 @@ def test_get_users_ok(api_base_url):
     assert isinstance(first["email"], str) and EMAIL_RE.match(first["email"]), "Niepoprawny format email"
     assert isinstance(first["avatar"], str) and URL_RE.match(first["avatar"]), "Niepoprawny URL avatara"
 
-@pytest.mark.smoke
+@pytest.mark.api
 def test_user_by_first_id(api_base_url):
     url = f"{api_base_url}/users/1"
 
@@ -69,7 +70,7 @@ def test_user_by_first_id(api_base_url):
     assert isinstance(user["avatar"], str) and user["avatar"] == "https://dotesthere.com/img/faces/1-image.jpg"
 
 
-@pytest.mark.smoke
+@pytest.mark.api
 def test_user_by_second_id(api_base_url):
     url = f"{api_base_url}/users/2"
 
@@ -94,12 +95,7 @@ def test_user_by_second_id(api_base_url):
     assert isinstance(user["last_name"], str) and user["last_name"] == "Weaver"
     assert isinstance(user["avatar"], str) and user["avatar"] == "https://dotesthere.com/img/faces/2-image.jpg"
 
-
-# ISO-8601 z sufiksem Z, np. 2023-01-01T12:00:00.000Z
-ISO_Z_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$")
-
-
-@pytest.mark.smoke
+@pytest.mark.api
 def test_post_users_returns_echo_and_metadata(api_base_url):
     url = f"{api_base_url}/users"
     payload = {
@@ -134,7 +130,7 @@ def test_post_users_returns_echo_and_metadata(api_base_url):
     dt = datetime.fromisoformat(user["createdAt"].replace("Z", "+00:00"))
     assert dt.year >= 1970, "Parsowanie createdAt zakończone nieprawidłową datą"
 
-@pytest.mark.smoke
+@pytest.mark.api
 def test_post_users_minimal_metadata(api_base_url):
     url = f"{api_base_url}/users"
     payload = {

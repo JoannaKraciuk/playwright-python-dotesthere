@@ -53,8 +53,10 @@ playwright-python-dotesthere/
 
 Przykładowy pytest.ini:
 [pytest]
+
 markers =
     smoke: podstawowe testy smoke
+
 testpaths = tests
 addopts = -vv -s
 
@@ -70,6 +72,9 @@ pytest -vv -s --alluredir allure-results
 
 Uruchom tylko smoke:
 pytest -m smoke --alluredir allure-results
+
+Uruchom tylko api:
+pytest -m api --alluredir allure-results
 
 
 Filtrowanie po nazwie:
