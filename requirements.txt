@@ -17,3 +17,4 @@ typing_extensions~=4.12.2
 pyee~=13.0.0
 greenlet~=3.2.4
 playwright~=1.55.0
+requests>=2.31.0

@@ -35,3 +35,7 @@ def page(context):
 @pytest.fixture
 def login_page(page):
     return LoginPage(page)
+
+@pytest.fixture(scope="session")
+def api_base_url() -> str:
+    return os.getenv("API_BASE_URL", "https://dotesthere.com/api")
