@@ -1,7 +1,7 @@
 import allure
 from pages.login_page import LoginPage
 
-@allure.epic("Strona logowania")
+@allure.epic("Strona główna")
 @allure.feature("Weryfikacja adresu url")
 @allure.story("Użytkownik po przejściu do strony https://dotesthere.com/ weryfikuje jej aktualny adres url")
 @allure.severity(allure.severity_level.CRITICAL)
@@ -23,11 +23,19 @@ def test_login(login_page: LoginPage):
     with allure.step("Weryfikacja komunikatu i widoku po zalogowaniu"):
         assert alert_message == 'You logged into a secure area!', "Brak komunikatu powitalnego"
 
+@allure.epic("Dropdown")
+@allure.feature("Wybór opcji z listy rozwijalnej")
+@allure.story("Użytkownik może wybrać jedną z opcji na liście rozwijalnej")
+@allure.severity(allure.severity_level.NORMAL)
 def test_select_option(login_page: LoginPage):
     login_page.open()
     toast_message = login_page.select_option()
     assert toast_message == 'Selected: Option 2'
 
+@allure.epic("Okno dodawania pliku")
+@allure.feature("Upload pliku")
+@allure.story("Użytkownik może dodać plik w systemie")
+@allure.severity(allure.severity_level.CRITICAL)
 def test_upload_file(login_page: LoginPage):
     login_page.open()
     message = login_page.upload_file()
