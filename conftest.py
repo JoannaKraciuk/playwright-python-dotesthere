@@ -26,15 +26,13 @@ def _pw():
         yield p
 
 
-@pytest.fixture(scope="session")
-def browser(_pw, pytestconfig):
-    # Bezpiecznie odczytujemy opcje z pluginu (jeśli są dostępne)
-    headed = getattr(pytestconfig.option, "headed", False)
-    slow_mo = getattr(pytestconfig.option, "slowmo", 0)
 
-    browser = _pw.chromium.launch(headless=not headed, slow_mo=slow_mo)
+@pytest.fixture(scope="session")
+def browser(_pw):
+    browser = _pw.chromium.launch(headless=False, slow_mo=800)  # zawsze headed
     yield browser
     browser.close()
+
 
 
 # --- Context / Page ---

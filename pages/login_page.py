@@ -18,6 +18,8 @@ class LoginPage:
         self.file_input: Locator    = page.locator("#file-upload")
         self.upload_button: Locator = page.get_by_role("button", name="Upload")
         self.upload_result: Locator = page.locator("#upload-result")
+        self.add_btn: Locator = page.get_by_role("button", name="Add Element")
+        self.delete_btn: Locator = page.locator('button.delete-btn')
 
     def open(self) -> str:
         self.page.goto(self.BASE_URL)
@@ -45,3 +47,15 @@ class LoginPage:
     def get_flash_message_text(self) -> str:
         expect(self.flash_message).to_be_visible()
         return self.flash_message.inner_text()
+
+    def add_element(self):
+        self.add_btn.click()
+        confirmation_message = self.toast.inner_text()
+        return confirmation_message
+
+    def delete_element(self):
+        self.add_btn.click()
+        self.delete_btn.click()
+        confirmation_message = self.toast.inner_text()
+        return confirmation_message
+
