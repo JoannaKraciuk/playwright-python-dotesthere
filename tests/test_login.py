@@ -19,7 +19,7 @@ def test_login(login_page: LoginPage):
     with allure.step("Wejście na stronę logowania"):
         login_page.open()
     with allure.step("Wprowadzenie poprawnych danych"):
-        alert_message = login_page.login()
+        alert_message = login_page.login('ankur', 'automation')
     with allure.step("Weryfikacja komunikatu i widoku po zalogowaniu"):
         assert alert_message == 'You logged into a secure area!', "Brak komunikatu powitalnego"
 
@@ -36,7 +36,7 @@ def test_select_option(login_page: LoginPage):
 @allure.feature("Upload pliku")
 @allure.story("Użytkownik może dodać plik w systemie")
 @allure.severity(allure.severity_level.CRITICAL)
-def test_upload_file(login_page: LoginPage):
+def test_upload_file(page, login_page: LoginPage):
     login_page.open()
-    message = login_page.upload_file()
-    assert 'uploaded successfully!' in message.inner_text()
+    message = login_page.upload_file("tests/files/Plik 8.pdf")
+    assert "uploaded successfully!" in message

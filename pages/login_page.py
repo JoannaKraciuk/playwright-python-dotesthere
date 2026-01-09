@@ -1,40 +1,47 @@
-from logging import addLevelName
 
-from playwright.sync_api import Page, expect
-
+from pathlib import Path
+from playwright.sync_api import Page, Locator, expect
 
 class LoginPage:
+    BASE_URL = "https://dotesthere.com/"
 
     def __init__(self, page: Page):
-        self.page = page
+        self.page: Page = page
+        self.username_input: Locator = page.locator("#username")
+        self.password_input: Locator = page.locator("#password")
+        self.login_button: Locator  = page.get_by_role("button", name="Login")
+        self.flash_message: Locator = page.locator("#flash-message")
 
+        self.dropdown: Locator      = page.locator("#dropdown")
+        self.toast: Locator         = page.locator("div.toast")
 
-    def open(self):
-        self.page.goto('https://dotesthere.com/')
+        self.file_input: Locator    = page.locator("#file-upload")
+        self.upload_button: Locator = page.get_by_role("button", name="Upload")
+        self.upload_result: Locator = page.locator("#upload-result")
+
+    def open(self) -> str:
+        self.page.goto(self.BASE_URL)
         return self.page.url
 
-    def login(self):
-        self.page.locator('#username').fill('ankur')
-        self.page.locator('#password').fill('automation')
-        self.page.get_by_role("button", name='Login').click()
-        alert_message = self.page.locator('#flash-message')
-        return alert_message.inner_text()
+    def login(self, username: str, password: str) -> str:
+        self.username_input.fill(username)
+        self.password_input.fill(password)
+        self.login_button.click()
+        expect(self.flash_message).to_be_visible()
+        return self.flash_message.inner_text()
 
-    def select_option(self):
-        self.page.locator('#dropdown').wait_for(state='visible')
-        self.page.locator('#dropdown').click()
-        self.page.select_option('#dropdown', label='Option 2')
-        self.page.locator('div.toast').is_visible()
-        toast_message = self.page.locator('div.toast').inner_text()
-        return toast_message
+    def select_option(self, label: str = "Option 2") -> str:
+        self.dropdown.select_option(label=label)
+        expect(self.toast).to_be_visible()
+        return self.toast.inner_text()
 
-    def upload_file(self):
-        self.page.set_input_files("#file-upload", "tests/files/Plik 8.pdf")
-        self.page.get_by_role('button', name='Upload').click()
-        message = self.page.locator('#upload-result')
-        expect(message).to_be_visible(timeout=5000)
-        self.page.locator('#upload-result')
-        return message
+    def upload_file(self, relative_path: str) -> str:
+        file_path = str((Path.cwd() / relative_path).resolve())
+        self.file_input.set_input_files(file_path)
+        self.upload_button.click()
+        expect(self.upload_result).to_be_visible()
+        return self.upload_result.inner_text()
 
-
-
+    def get_flash_message_text(self) -> str:
+        expect(self.flash_message).to_be_visible()
+        return self.flash_message.inner_text()
