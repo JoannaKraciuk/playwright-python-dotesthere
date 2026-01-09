@@ -21,6 +21,10 @@ class LoginPage:
         self.add_btn: Locator = page.get_by_role("button", name="Add Element")
         self.delete_btn: Locator = page.locator('button.delete-btn')
 
+        self.enable_btn: Locator = page.get_by_role("button", name="Enable")
+        self.dynamic_input: Locator = page.locator('#dynamic-input')
+        self.disable_btn: Locator = page.get_by_role("button", name="Disable")
+
     def open(self) -> str:
         self.page.goto(self.BASE_URL)
         return self.page.url
@@ -58,4 +62,22 @@ class LoginPage:
         self.delete_btn.click()
         confirmation_message = self.toast.inner_text()
         return confirmation_message
+
+    def enable_input(self):
+        self.enable_btn.click()
+        return self.dynamic_input.is_enabled()
+
+    def disable_input(self):
+        self.disable_btn.click()
+        return self.dynamic_input.is_disabled()
+
+    def fill_input(self, text: str):
+        self.dynamic_input.fill(text)
+        return self.dynamic_input.input_value()
+
+    def get_toast_message(self):
+        return self.toast.inner_text()
+
+
+
 

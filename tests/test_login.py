@@ -42,7 +42,6 @@ def test_upload_file(page, login_page: LoginPage):
     message = login_page.upload_file("tests/files/Plik 8.pdf")
     assert "uploaded successfully!" in message
 
-@pytest.mark.smoke
 @allure.epic("Okno dodawania elementu")
 @allure.feature("Dodanie elementu")
 @allure.story("Użytkownik może dodać element w systemie")
@@ -52,7 +51,7 @@ def test_add_element(page, login_page: LoginPage):
     confirmation_message = login_page.add_element()
     assert confirmation_message == "Element added! ➕"
 
-@pytest.mark.smoke
+
 @allure.epic("Okno usuwania elementu")
 @allure.feature("Usunięcie elementu")
 @allure.story("Użytkownik może usunąć element z systemu")
@@ -61,4 +60,17 @@ def test_delete_element(page, login_page: LoginPage):
     login_page.open()
     confirmation_message = login_page.delete_element()
     assert confirmation_message == "Element removed! 🗑️"
+
+@pytest.mark.smoke
+@allure.epic("Dynamic Controls")
+@allure.feature("Enalbe/Disable input")
+@allure.story("Użytkownik może włączać/wyłączać pole i widzi komunikat")
+@allure.severity(allure.severity_level.CRITICAL)
+def test_dynamic_controls(page, login_page: LoginPage):
+    login_page.open()
+    assert login_page.enable_input() is True
+    assert login_page.get_toast_message() == "Input enabled!"
+    assert login_page.fill_input("Playwright dynamic controls") == "Playwright dynamic controls"
+    assert login_page.disable_input() is True
+    assert login_page.get_toast_message() == "Input disabled!"
 
