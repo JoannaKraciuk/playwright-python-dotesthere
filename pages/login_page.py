@@ -1,5 +1,5 @@
-
 from pathlib import Path
+
 from playwright.sync_api import Page, Locator, expect
 
 class LoginPage:
@@ -24,6 +24,11 @@ class LoginPage:
         self.enable_btn: Locator = page.get_by_role("button", name="Enable")
         self.dynamic_input: Locator = page.locator('#dynamic-input')
         self.disable_btn: Locator = page.get_by_role("button", name="Disable")
+
+        self.table: Locator = page.locator('#table1')
+        self.c_headers: Locator = page.locator("#table1 >  thead > tr > th")
+
+        self.last_name_cells: Locator = page.locator('#table1 tbody tr')
 
     def open(self) -> str:
         self.page.goto(self.BASE_URL)
@@ -78,6 +83,19 @@ class LoginPage:
     def get_toast_message(self):
         return self.toast.inner_text()
 
+    def sort_last_name_toggle(self):
+        self.c_headers.nth(0).click()
+
+    def get_last_name_values(self) -> list[str]:
+        count = self.last_name_cells.count()
+        values = []
+
+        for i in range(count):
+            cell = self.last_name_cells.nth(i)
+            if cell.is_visible():
+                values.append(cell.text_content().strip())
+
+        return values
 
 
 
