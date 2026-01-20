@@ -3,7 +3,7 @@ import allure
 from pages.login_page import LoginPage
 from pages.upload_page import UploadPage
 
-@pytest.mark.smoke
+
 @allure.epic("Okno dodawania pliku")
 @allure.feature("Upload pliku")
 @allure.story("Użytkownik może dodać plik w systemie")

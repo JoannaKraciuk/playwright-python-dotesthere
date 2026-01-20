@@ -7,6 +7,7 @@ from playwright.sync_api import sync_playwright
 
 from pages.dropdown_page import DropdownPage
 from pages.dynamic_controls_page import DynamicPage
+from pages.elements_page import ElementsPage
 from pages.login_page import LoginPage
 from pages.upload_page import UploadPage
 
@@ -82,6 +83,10 @@ def dropdown_page(page):
 @pytest.fixture
 def upload_page(page):
     return UploadPage(page)
+
+@pytest.fixture
+def elements_page(page):
+    return ElementsPage(page)
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):

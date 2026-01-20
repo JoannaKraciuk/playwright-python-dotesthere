@@ -3,7 +3,6 @@ import allure
 from pages.login_page import LoginPage
 from pages.dropdown_page import DropdownPage
 
-@pytest.mark.smoke
 @allure.epic("Dropdown")
 @allure.feature("Wybór opcji z listy rozwijalnej")
 @allure.story("Użytkownik może wybrać jedną z opcji na liście rozwijalnej")

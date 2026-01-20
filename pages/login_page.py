@@ -41,19 +41,8 @@ class LoginPage(BasePage):
         expect(self.flash_message).to_be_visible()
         return self.flash_message.inner_text()
 
-    def add_element(self) -> str:
-        self.click(self.add_btn)
-        self.wait_visible(self.toast)
-        return self.get_text(self.toast)
-
-    def delete_element(self):
-        self.click(self.add_btn)
-        self.click(self.delete_btn)
-        self.wait_visible(self.toast)
-        return self.get_text(self.toast)
-
     def get_toast_message(self) -> str:
-        return self.read_toast(self.toast)
+        return self.read_toast()
 
     def sort_last_name_toggle(self):
         self.click(self.c_headers.nth(0))

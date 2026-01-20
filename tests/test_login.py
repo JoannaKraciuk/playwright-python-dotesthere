@@ -24,30 +24,6 @@ def test_login(login_page: LoginPage):
     with allure.step("Weryfikacja komunikatu i widoku po zalogowaniu"):
         assert alert_message == 'You logged into a secure area!', "Brak komunikatu powitalnego"
 
-
-@allure.epic("Okno dodawania elementu")
-@allure.feature("Dodanie elementu")
-@allure.story("Użytkownik może dodać element w systemie")
-@allure.severity(allure.severity_level.CRITICAL)
-def test_add_element(page, login_page: LoginPage):
-    with allure.step("Przejście do strony https://dotesthere.com/"):
-        login_page.open()
-    with allure.step("Dodanie elementu w systemie"):
-        confirmation_message = login_page.add_element()
-        assert confirmation_message == "Element added! ➕"
-
-
-@allure.epic("Okno usuwania elementu")
-@allure.feature("Usunięcie elementu")
-@allure.story("Użytkownik może usunąć element z systemu")
-@allure.severity(allure.severity_level.CRITICAL)
-def test_delete_element(page, login_page: LoginPage):
-    with allure.step("Przejście do strony https://dotesthere.com/"):
-        login_page.open()
-    with allure.step("Usunięcie elementu z systemu"):
-        confirmation_message = login_page.delete_element()
-        assert confirmation_message == "Element removed! 🗑️"
-
 @allure.epic("Sortable Data Tables")
 @allure.feature("Sort Last Name column")
 @allure.story("Użytkownik może sortować kolumnę 'Last Name' malejąco o rosnąco")
