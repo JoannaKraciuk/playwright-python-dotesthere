@@ -11,8 +11,6 @@ class LoginPage(BasePage):
         self.login_button: Locator  = page.get_by_role("button", name="Login")
         self.flash_message: Locator = page.locator("#flash-message")
 
-        self.dropdown: Locator      = page.locator("#dropdown")
-        self.toast: Locator         = page.locator("div.toast")
 
         self.file_input: Locator    = page.locator("#file-upload")
         self.upload_button: Locator = page.get_by_role("button", name="Upload")
@@ -39,11 +37,6 @@ class LoginPage(BasePage):
         expect(self.flash_message).to_be_visible()
         return self.flash_message.inner_text()
 
-    def select_option(self, label: str = 'Option 2') -> str:
-        self.select_option_in_dropdown(self.dropdown, label)
-        expect(self.toast).to_be_visible()
-        return self.toast.inner_text()
-
     def upload_file(self, relative_path: str = 'tests/files/Plik 8.pdf') -> str:
         self.set_file(self.file_input, relative_path)
         self.click_and_wait_for(self.upload_button, self.upload_result)
@@ -64,11 +57,8 @@ class LoginPage(BasePage):
         self.wait_visible(self.toast)
         return self.get_text(self.toast)
 
-
-
     def get_toast_message(self) -> str:
-        self.wait_visible(self.toast)
-        return self.toast.inner_text().strip()
+        return self.read_toast(self.toast)
 
     def sort_last_name_toggle(self):
         self.click(self.c_headers.nth(0))

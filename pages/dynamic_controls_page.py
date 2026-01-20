@@ -9,7 +9,6 @@ class DynamicPage(BasePage):
         self.enable_btn: Locator = page.get_by_role("button", name="Enable")
         self.dynamic_input: Locator = page.locator('#dynamic-input')
         self.disable_btn: Locator = page.get_by_role("button", name="Disable")
-        self.toast: Locator = page.locator("div.toast")
 
     def enable_input(self) -> bool:
         self.click(self.enable_btn)
@@ -24,6 +23,6 @@ class DynamicPage(BasePage):
         self.expect_value(self.dynamic_input, text)
         return text
 
-    def get_toast_message(self) -> str:
-        self.wait_visible(self.toast)
-        return self.toast.inner_text().strip()
+    def get_toast_message(self):
+        return self.read_toast()
+

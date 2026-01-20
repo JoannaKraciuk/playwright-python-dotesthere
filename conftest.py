@@ -5,6 +5,7 @@ import allure
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
+from pages.dropdown_page import DropdownPage
 from pages.dynamic_controls_page import DynamicPage
 from pages.login_page import LoginPage
 
@@ -72,6 +73,10 @@ def login_page(page):
 @pytest.fixture
 def dynamic_page(page):
     return DynamicPage(page)
+
+@pytest.fixture
+def dropdown_page(page):
+    return DropdownPage(page)
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):

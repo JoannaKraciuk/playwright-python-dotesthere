@@ -24,17 +24,6 @@ def test_login(login_page: LoginPage):
     with allure.step("Weryfikacja komunikatu i widoku po zalogowaniu"):
         assert alert_message == 'You logged into a secure area!', "Brak komunikatu powitalnego"
 
-@allure.epic("Dropdown")
-@allure.feature("Wybór opcji z listy rozwijalnej")
-@allure.story("Użytkownik może wybrać jedną z opcji na liście rozwijalnej")
-@allure.severity(allure.severity_level.NORMAL)
-def test_select_option(login_page: LoginPage):
-    with allure.step("Przejście do strony DoTestHere"):
-        login_page.open()
-    with allure.step("Wybranie opcji na dropdownu."):
-        toast_message = login_page.select_option()
-        assert toast_message == 'Selected: Option 2'
-
 @allure.epic("Okno dodawania pliku")
 @allure.feature("Upload pliku")
 @allure.story("Użytkownik może dodać plik w systemie")

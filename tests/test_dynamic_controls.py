@@ -3,7 +3,6 @@ import allure
 from pages.login_page import LoginPage
 from pages.dynamic_controls_page import DynamicPage
 
-@pytest.mark.smoke
 @allure.epic("Dynamic Controls")
 @allure.feature("Enalbe/Disable input")
 @allure.story("Użytkownik może włączać/wyłączać pole i widzi komunikat")
@@ -27,4 +26,4 @@ def test_dynamic_controls(page, login_page: LoginPage, dynamic_page: DynamicPage
         assert dynamic_page.disable_input() is True
 
     with allure.step("Pobranie komunikatu 'Element jest niedostępny'"):
-        assert login_page.get_toast_message() == "Input disabled!"
+        assert dynamic_page.get_toast_message() == "Input disabled!"

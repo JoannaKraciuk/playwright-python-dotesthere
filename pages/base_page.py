@@ -15,7 +15,6 @@ class BasePage:
         self.page.goto(url)
         return url
 
-
     def wait_for_url(self, url_or_regex: Union[str, object], timeout_ms: int = 5000):
         expect(self.page).to_have_url(url_or_regex, timeout=timeout_ms)
 
@@ -94,6 +93,15 @@ class BasePage:
                 if text:
                     values.append(text.strip())
         return values
+
+    @property
+    def toast(self):
+        return self.page.locator("div.toast")
+
+    def read_toast(self) -> str:
+        expect(self.toast).to_be_visible()
+        return self.toast.inner_text().strip()
+
 
 
 
