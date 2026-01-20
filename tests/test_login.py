@@ -69,34 +69,6 @@ def test_delete_element(page, login_page: LoginPage):
         confirmation_message = login_page.delete_element()
         assert confirmation_message == "Element removed! 🗑️"
 
-@pytest.mark.smoke
-@allure.epic("Dynamic Controls")
-@allure.feature("Enalbe/Disable input")
-@allure.story("Użytkownik może włączać/wyłączać pole i widzi komunikat")
-@allure.severity(allure.severity_level.CRITICAL)
-
-def test_dynamic_controls(page, login_page: LoginPage):
-
-    with allure.step("Przejście do strony DoTestHere"):
-        login_page.open()
-
-    with allure.step("Zmiana inputu na dostępny"):
-        assert login_page.enable_input() is True
-
-    with allure.step("Pobranie komunikatu 'Element jest dostępny'"):
-        assert login_page.get_toast_message() == "Input enabled!"
-
-    with allure.step("Wypełnienie pola input"):
-        assert login_page.fill_input("Playwright dynamic controls") == "Playwright dynamic controls"
-
-    with allure.step("Zmiana inputu na niedostępny"):
-        assert login_page.disable_input() is True
-
-    with allure.step("Pobranie komunikatu 'Element jest niedostępny'"):
-        assert login_page.get_toast_message() == "Input disabled!"
-
-
-
 @allure.epic("Sortable Data Tables")
 @allure.feature("Sort Last Name column")
 @allure.story("Użytkownik może sortować kolumnę 'Last Name' malejąco o rosnąco")

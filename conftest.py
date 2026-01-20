@@ -5,6 +5,7 @@ import allure
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
+from pages.dynamic_controls_page import DynamicPage
 from pages.login_page import LoginPage
 
 os.makedirs("screenshots", exist_ok=True)
@@ -68,6 +69,9 @@ def page(context):
 def login_page(page):
     return LoginPage(page)
 
+@pytest.fixture
+def dynamic_page(page):
+    return DynamicPage(page)
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):

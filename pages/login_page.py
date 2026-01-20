@@ -1,4 +1,3 @@
-from pathlib import Path
 from pages.base_page import BasePage
 from playwright.sync_api import Page, Locator, expect
 
@@ -56,7 +55,7 @@ class LoginPage(BasePage):
 
     def add_element(self) -> str:
         self.click(self.add_btn)
-        self.wait_visible(self.toast)  # <- kluczowy krok, anty-flaky
+        self.wait_visible(self.toast)
         return self.get_text(self.toast)
 
     def delete_element(self):
@@ -65,18 +64,7 @@ class LoginPage(BasePage):
         self.wait_visible(self.toast)
         return self.get_text(self.toast)
 
-    def enable_input(self) -> bool:
-        self.click(self.enable_btn)
-        return self.wait_enabled(self.dynamic_input)
 
-    def disable_input(self) -> bool:
-        self.click(self.disable_btn)
-        return self.wait_disabled(self.dynamic_input)
-
-    def fill_input(self, text: str = "Playwright dynamic controls") -> str:
-        self.fill(self.dynamic_input, text)
-        self.expect_value(self.dynamic_input, text)  # <-- ważne!
-        return text
 
     def get_toast_message(self) -> str:
         self.wait_visible(self.toast)
