@@ -8,6 +8,7 @@ from playwright.sync_api import sync_playwright
 from pages.dropdown_page import DropdownPage
 from pages.dynamic_controls_page import DynamicPage
 from pages.login_page import LoginPage
+from pages.upload_page import UploadPage
 
 os.makedirs("screenshots", exist_ok=True)
 # --- Konfiguracja bazowych URL ---
@@ -78,14 +79,13 @@ def dynamic_page(page):
 def dropdown_page(page):
     return DropdownPage(page)
 
+@pytest.fixture
+def upload_page(page):
+    return UploadPage(page)
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):
-    """
-    Po każdym teście zatrzymuje tracing i:
-      - na FAIL: dołącza trace (.zip) i wideo (.webm) do Allure,
-      - na PASS: zamyka trace bez pliku, usuwa wideo.
-    Zabezpieczone try/except, aby uniknąć INTERNALERROR.
-    """
+
     outcome = yield
     rep = outcome.get_result()
 

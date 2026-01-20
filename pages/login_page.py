@@ -37,11 +37,6 @@ class LoginPage(BasePage):
         expect(self.flash_message).to_be_visible()
         return self.flash_message.inner_text()
 
-    def upload_file(self, relative_path: str = 'tests/files/Plik 8.pdf') -> str:
-        self.set_file(self.file_input, relative_path)
-        self.click_and_wait_for(self.upload_button, self.upload_result)
-        return self.upload_result.inner_text()
-
     def get_flash_message_text(self) -> str:
         expect(self.flash_message).to_be_visible()
         return self.flash_message.inner_text()
