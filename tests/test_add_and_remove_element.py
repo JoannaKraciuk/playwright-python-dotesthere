@@ -3,7 +3,6 @@ import allure
 from pages.login_page import LoginPage
 from pages.elements_page import ElementsPage
 
-@pytest.mark.smoke
 @allure.epic("Okno dodawania elementu")
 @allure.feature("Dodanie elementu")
 @allure.severity(allure.severity_level.CRITICAL)

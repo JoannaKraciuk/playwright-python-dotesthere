@@ -12,7 +12,7 @@ class BasePage:
 
 
     def open(self, url: str = BASE_URL):
-        self.page.goto(url)
+        self.page.goto(url, timeout=50000)
         return url
 
     def wait_for_url(self, url_or_regex: Union[str, object], timeout_ms: int = 5000):
