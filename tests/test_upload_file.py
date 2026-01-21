@@ -4,7 +4,6 @@ from pages.login_page import LoginPage
 from pages.upload_page import UploadPage
 from utils.test_data import UPLOAD_FILES
 
-
 @allure.epic("Okno dodawania pliku")
 @allure.feature("Upload pliku")
 @allure.story("Użytkownik może dodać plik w systemie")
