@@ -11,17 +11,6 @@ class LoginPage(BasePage):
         self.login_button: Locator  = page.get_by_role("button", name="Login")
         self.flash_message: Locator = page.locator("#flash-message")
 
-
-        self.file_input: Locator    = page.locator("#file-upload")
-        self.upload_button: Locator = page.get_by_role("button", name="Upload")
-        self.upload_result: Locator = page.locator("#upload-result")
-        self.add_btn: Locator = page.get_by_role("button", name="Add Element")
-        self.delete_btn: Locator = page.locator('button.delete-btn')
-
-        self.enable_btn: Locator = page.get_by_role("button", name="Enable")
-        self.dynamic_input: Locator = page.locator('#dynamic-input')
-        self.disable_btn: Locator = page.get_by_role("button", name="Disable")
-
         self.table: Locator = page.locator('#table1')
         self.c_headers: Locator = page.locator("#table1 >  thead > tr > th")
 
@@ -43,12 +32,6 @@ class LoginPage(BasePage):
 
     def get_toast_message(self) -> str:
         return self.read_toast()
-
-    def sort_last_name_toggle(self):
-        self.click(self.c_headers.nth(0))
-
-    def get_last_name_values(self) -> list[str]:
-        return self.get_visible_texts(self.last_name_cells)
 
 
 

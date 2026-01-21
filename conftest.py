@@ -9,6 +9,7 @@ from pages.dropdown_page import DropdownPage
 from pages.dynamic_controls_page import DynamicPage
 from pages.elements_page import ElementsPage
 from pages.login_page import LoginPage
+from pages.sorting_page import SortingPage
 from pages.upload_page import UploadPage
 
 os.makedirs("screenshots", exist_ok=True)
@@ -87,6 +88,10 @@ def upload_page(page):
 @pytest.fixture
 def elements_page(page):
     return ElementsPage(page)
+
+@pytest.fixture
+def sorting_page(page):
+    return SortingPage(page)
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):

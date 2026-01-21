@@ -23,21 +23,3 @@ def test_login(login_page: LoginPage):
         alert_message = login_page.login('ankur', 'automation')
     with allure.step("Weryfikacja komunikatu i widoku po zalogowaniu"):
         assert alert_message == 'You logged into a secure area!', "Brak komunikatu powitalnego"
-
-@allure.epic("Sortable Data Tables")
-@allure.feature("Sort Last Name column")
-@allure.story("Użytkownik może sortować kolumnę 'Last Name' malejąco o rosnąco")
-@allure.severity(allure.severity_level.CRITICAL)
-def test_sort_last_name_asc(login_page: LoginPage):
-    login_page.open()
-
-    with allure.step("Kliknięcie nagłówka kolumny Last Name (ASC)"):
-        login_page.sort_last_name_toggle()
-
-    with allure.step("Pobranie wartości kolumny Last Name"):
-        last_names = login_page.get_last_name_values()
-
-    with allure.step("Weryfikacja sortowania A–Z"):
-        assert last_names == sorted(last_names, key=str.lower), \
-            "Kolumna 'Last Name' nie jest posortowana rosnąco (A–Z)"
-        print(last_names)
