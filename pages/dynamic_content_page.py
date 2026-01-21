@@ -26,3 +26,8 @@ class DynamicContentPage(BasePage):
         self.click(self.refresh_button)
         self.wait_visible(self.dynamic_text)
         return self.dynamic_text.inner_text()
+
+    def double_click_refresh(self):
+        self.refresh_button.dblclick()
+        self.wait_visible(self.dynamic_text)
+        return self.dynamic_text.inner_text()
