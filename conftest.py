@@ -11,6 +11,7 @@ from pages.elements_page import ElementsPage
 from pages.login_page import LoginPage
 from pages.sorting_page import SortingPage
 from pages.upload_page import UploadPage
+from pages.dynamic_content_page import DynamicContentPage
 
 os.makedirs("screenshots", exist_ok=True)
 # --- Konfiguracja bazowych URL ---
@@ -92,6 +93,10 @@ def elements_page(page):
 @pytest.fixture
 def sorting_page(page):
     return SortingPage(page)
+
+@pytest.fixture
+def dynamic_content_page(page):
+    return DynamicContentPage(page)
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):
