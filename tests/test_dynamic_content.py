@@ -29,8 +29,9 @@ class TestDynamicContent:
             after = dynamic_content_page.double_click_refresh()
             assert before != after
 
+    @pytest.mark.parametrize("clicks", [1, 2, 5])
     @allure.story("Użytkownik może dynamicznie zmieniać tekst przyciskiem")
-    def test_multi_click_dynamic_content(self, login_page: LoginPage, dynamic_content_page: DynamicContentPage):
+    def test_multi_click_dynamic_content(self, login_page: LoginPage, dynamic_content_page: DynamicContentPage, clicks):
         with allure.step("Otwórz stronę DoTestHere"):
             login_page.open()
 
@@ -38,7 +39,7 @@ class TestDynamicContent:
             before = dynamic_content_page.dynamic_text.inner_text()
 
         with allure.step("Wykonanie multi-click (3 razy)"):
-            after = dynamic_content_page.multi_click_refresh(times=3, delay=0.02)
+            after = dynamic_content_page.multi_click_refresh(times=clicks, delay=0.02)
 
         with allure.step("Sprawdzenie, że tekst zmienił się po multi-click"):
             assert before != after
