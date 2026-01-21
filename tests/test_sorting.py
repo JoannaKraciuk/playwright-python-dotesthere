@@ -3,9 +3,9 @@ import allure
 from pages.login_page import LoginPage
 from pages.sorting_page import SortingPage
 
-@allure.epic("Sortable Data Tables")
-@allure.feature("Sort Last Name column")
-@allure.story("Użytkownik może sortować kolumnę 'Last Name' malejąco o rosnąco")
+@allure.epic("Tabela sortowania")
+@allure.feature("Sortowanie po wybranej kolumnie")
+@allure.story("Użytkownik może sortować kolumnę 'Last Name' malejąco i rosnąco")
 @allure.severity(allure.severity_level.CRITICAL)
 def test_sort_last_name_asc(login_page: LoginPage, sorting_page: SortingPage):
     login_page.open()

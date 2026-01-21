@@ -3,8 +3,8 @@ import allure
 from pages.login_page import LoginPage
 from pages.dynamic_controls_page import DynamicPage
 
-@allure.epic("Dynamic Controls")
-@allure.feature("Enalbe/Disable input")
+@allure.epic("Dynamiczne zmiany input")
+@allure.feature("Dostępny/niedostępny input")
 @allure.story("Użytkownik może włączać/wyłączać pole i widzi komunikat")
 @allure.severity(allure.severity_level.CRITICAL)
 
