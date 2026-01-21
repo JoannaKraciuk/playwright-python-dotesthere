@@ -3,6 +3,7 @@ import allure
 from pages.login_page import LoginPage
 from pages.dynamic_content_page import DynamicContentPage
 
+
 @allure.epic("Dynamiczny tekst")
 @allure.feature("Dynamiczna zmiana tekstu")
 @allure.severity(allure.severity_level.NORMAL)
@@ -28,3 +29,17 @@ class TestDynamicContent:
             after = dynamic_content_page.double_click_refresh()
             assert before != after
 
+    @pytest.mark.smoke
+    @allure.story("Użytkownik może dynamicznie zmieniać tekst przyciskiem")
+    def test_multi_click_dynamic_content(self, login_page: LoginPage, dynamic_content_page: DynamicContentPage):
+        with allure.step("Otwórz stronę DoTestHere"):
+            login_page.open()
+
+        with allure.step("Pobranie początkowego tekstu"):
+            before = dynamic_content_page.dynamic_text.inner_text()
+
+        with allure.step("Wykonanie multi-click (3 razy)"):
+            after = dynamic_content_page.multi_click_refresh(times=3, delay=0.02)
+
+        with allure.step("Sprawdzenie, że tekst zmienił się po multi-click"):
+            assert before != after

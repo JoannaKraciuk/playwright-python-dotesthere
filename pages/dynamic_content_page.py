@@ -31,3 +31,12 @@ class DynamicContentPage(BasePage):
         self.refresh_button.dblclick()
         self.wait_visible(self.dynamic_text)
         return self.dynamic_text.inner_text()
+
+    def multi_click_refresh(self, times: int = 5, delay: float = 0.1):
+        import time
+        for i in range(times):
+            self.click(self.refresh_button)
+            if delay > 0:
+                time.sleep(delay)
+        self.wait_visible(self.dynamic_text)
+        return self.dynamic_text.inner_text()
