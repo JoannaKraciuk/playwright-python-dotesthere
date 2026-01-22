@@ -27,13 +27,12 @@ jobs:
         shell: pwsh
         run: |
           python -m venv .venv
-          # Używamy Pythona z venv
           $python = ".\.venv\Scripts\python.exe"
-          # Zaktualizuj pip w venv
+          # Zaktualizuj pip
           & $python -m pip install --upgrade pip
-          # Zainstaluj wszystkie zależności
+          # Zainstaluj wszystkie zależności wymuszając reinstalację
           & $python -m pip install --force-reinstall --no-cache-dir -r requirements.txt
-          # Teraz Playwright CLI
+          # Teraz zainstaluj Playwright CLI
           & $python -m playwright install
 
       - name: Run tests
