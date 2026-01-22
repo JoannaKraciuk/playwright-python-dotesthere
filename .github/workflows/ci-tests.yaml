@@ -35,13 +35,8 @@ jobs:
       - name: Run Playwright tests
         shell: pwsh
         run: |
-          pytest -vv -s \
-            --alluredir=allure-results \
-            --browser=chromium \
-            --output=test-results \
-            --screenshot=only-on-failure \
-            --video=retain-on-failure \
-            --tracing=retain-on-failure || echo "Tests failed"
+          pytest -vv -s --alluredir=allure-results --browser=chromium --output=test-results --screenshot=only-on-failure --video=retain-on-failure --tracing=retain-on-failure || echo "Tests failed"
+      
 
       - name: Upload Allure results
         uses: actions/upload-artifact@v4
@@ -69,7 +64,7 @@ jobs:
         if: always()
         shell: pwsh
         run: |
-          & $env:ALLURE_CMD generate allure-results -o allure-report --clean
+          & "$env:ALLURE_CMD" generate "allure-results" -o "allure-report" --clean
 
       - name: Upload Allure HTML report
         uses: actions/upload-artifact@v4
@@ -78,3 +73,12 @@ jobs:
           name: allure-report
           path: allure-report
           if-no-files-found: error
+
+      - name: List Allure results
+        shell: pwsh
+        run: |
+          if (Test-Path "allure-results") {
+            Get-ChildItem "allure-results" -Recurse
+          } else {
+            Write-Host "Folder allure-results does not exist!"
+          }
