@@ -26,21 +26,25 @@ jobs:
       - name: Install dependencies
         run: |
           python -m venv .venv
-          source .venv/bin/activate
+          # Aktywacja w PowerShell
+          .\.venv\Scripts\Activate.ps1
           pip install --upgrade pip
           pip install -r requirements.txt
           playwright install
+        shell: pwsh
 
       - name: Run tests with Allure results
         run: |
-          source .venv/bin/activate
+          .\.venv\Scripts\Activate.ps1
           pytest -vv -s --alluredir allure-results || true
-        continue-on-error: true  # żeby workflow nie zatrzymywał się przy failed tests
+        continue-on-error: true
+        shell: pwsh
 
       - name: Generate Allure report
         run: |
-          source .venv/bin/activate
+          .\.venv\Scripts\Activate.ps1
           allure generate allure-results -o allure-report --clean || true
+        shell: pwsh
 
       - name: Upload Allure report as artifact
         uses: actions/upload-artifact@v4
