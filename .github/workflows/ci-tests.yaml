@@ -27,26 +27,9 @@ jobs:
         shell: pwsh
         run: |
           python -m venv .venv
-          # Aktywacja środowiska w tym bloku
-          .\.venv\Scripts\Activate.ps1
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          python -m playwright install
+          # Zawsze używamy Pythona z venv
+          .\.venv\Scripts\python.exe -m pip install --upgrade pip
+          .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+          .\.venv\Scripts\python.exe -m playwright install
 
       - name: Run tests
-        shell: pwsh
-        run: |
-          .\.venv\Scripts\Activate.ps1
-          pytest -vv -s --alluredir allure-results || true
-
-      - name: Generate Allure report
-        shell: pwsh
-        run: |
-          .\.venv\Scripts\Activate.ps1
-          allure generate allure-results -o allure-report --clean || true
-
-      - name: Upload Allure report as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: allure-report
