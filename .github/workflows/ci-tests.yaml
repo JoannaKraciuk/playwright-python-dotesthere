@@ -26,11 +26,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m venv .venv
-          # Aktywacja w PowerShell
           .\.venv\Scripts\Activate.ps1
           pip install --upgrade pip
           pip install -r requirements.txt
-          playwright install
+          # Playwright CLI poprzez python -m
+          python -m playwright install
         shell: pwsh
 
       - name: Run tests with Allure results
