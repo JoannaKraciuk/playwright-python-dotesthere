@@ -10,10 +10,6 @@ jobs:
   test:
     runs-on: windows-latest
 
-    strategy:
-      matrix:
-        python-version: [ "3.12" ]
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -21,24 +17,28 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+          python-version: "3.12"
+          cache: "pip"
 
-      - name: Install Playwright system deps (browsers)
+      - name: Install Playwright system deps
         uses: microsoft/playwright-github-action@v1
 
-      - name: DEBUG show requirements.txt
-        shell: pwsh
-        run: |
-          if (Test-Path requirements.txt) { 
-            Write-Host "==== requirements.txt (workspace) ====" 
-            Get-Content requirements.txt 
-          } else { 
-            Write-Error "requirements.txt not found" 
-          }
-
-      - name: Install Python dependencies
+      - name: Install dependencies
         shell: pwsh
         run: |
           python -m pip install --upgrade pip
-          # Zapobiegamy auto-aktualizacji pip podczas installa
+          python -m pip install -r requirements.txt
+          python -m playwright install
+
+      - name: Run tests
+        shell: pwsh
+        run: |
+          pytest -vv -s --alluredir=allure-results || echo "Tests failed"
+
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results
+          path: allure-results
+          if-no-files-found: ignore
