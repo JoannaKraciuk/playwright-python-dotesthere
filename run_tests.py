@@ -1,10 +1,10 @@
+
 import subprocess
 import sys
 import platform
 import os
 
 def run_command(command):
-    """Uruchamia komendę i przerywa przy błędzie"""
     print(f"\n>> Running: {command}")
     result = subprocess.run(command, shell=True)
     if result.returncode != 0:
@@ -12,13 +12,12 @@ def run_command(command):
         sys.exit(result.returncode)
 
 def open_report(path):
-    """Otwiera statyczny raport w przeglądarce w zależności od OS"""
     system = platform.system()
     if system == "Windows":
-        run_command(f'start "" "{os.path.abspath(path)}"')
-    elif system == "Darwin":  # Mac
+        os.startfile(os.path.abspath(path))
+    elif system == "Darwin":
         run_command(f'open "{os.path.abspath(path)}"')
-    else:  # Linux
+    else:
         run_command(f'xdg-open "{os.path.abspath(path)}"')
 
 def main():
@@ -28,16 +27,10 @@ def main():
     # 1. Uruchom testy
     run_command(f"pytest -vv -s --alluredir {allure_results}")
 
-    # 2. Otwórz raport tymczasowy w przeglądarce (serve)
-    print("\n🔹 Opening temporary Allure report (serve)...")
-    run_command(f"allure serve {allure_results}")
-
-    # 3. Wygeneruj statyczny raport
-    print("\n🔹 Generating static Allure report...")
+    # 2. Generuj statyczny raport
     run_command(f"allure generate {allure_results} -o {allure_report} --clean")
 
-    # 4. Otwórz statyczny raport w przeglądarce
-    print("\n🔹 Opening static Allure report...")
+    # 3. Otwórz statyczny raport
     index_html = os.path.join(allure_report, "index.html")
     if os.path.exists(index_html):
         open_report(index_html)

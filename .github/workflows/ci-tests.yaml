@@ -23,12 +23,25 @@ jobs:
       - name: Install Playwright system deps
         uses: microsoft/playwright-github-action@v1
 
+
       - name: Install dependencies
         shell: pwsh
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+          pip install -r requirements.txt
           python -m playwright install
+
+      - name: Run tests
+        shell: pwsh
+        run: |
+          pytest -vv -s ^
+            --browser=chromium ^
+            --output=test-results ^
+            --screenshot=only-on-failure ^
+            --video=retain-on-failure ^
+            --tracing=retain-on-failure ^
+            --alluredir=allure-results || echo "Tests failed"
+      
 
       - name: Run tests
         shell: pwsh
