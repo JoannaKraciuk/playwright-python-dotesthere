@@ -111,3 +111,27 @@ Czytelny kod: sensowne nazwy testów i funkcji, komentarze wyjaśniające krok t
 ![Raport_Allure](screenshots/2026-01-22_09h42_23.png)
 ![Raport_Allure](screenshots/2026-01-22_09h42_55.png)
 ![Raport_Allure](screenshots/2026-01-22_09h43_22.png)
+
+
+## 🔄 CI/CD – Integracja z GitHub Actions
+
+Ten projekt jest w pełni zintegrowany z **GitHub Actions**, dzięki czemu testy Playwright Python są
+automatycznie uruchamiane przy każdym:
+
+- pushu do gałęzi `main`,
+- otwarciu lub aktualizacji *Pull Requestu*.
+
+Workflow wykonuje:
+
+1. Instalację środowiska Python i Playwright.
+2. Uruchomienie testów Playwright (`pytest`) z raportowaniem Allure.
+3. Generowanie artefaktów:
+   - `allure-results` – surowe dane raportowe,
+   - statyczny raport HTML (`allure-report`).
+4. Udostępnienie raportów jako artefaktów w zakładce **Actions → Artifacts**.
+
+Workflow znajduje się w pliku:
+```text
+.github/workflows/ci-tests.yaml
+```
+
