@@ -3,8 +3,7 @@ name: Playwright Python Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
 
 jobs:
@@ -13,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.12]
+        python-version: [ "3.12" ]
 
     steps:
       - name: Checkout repo
@@ -23,36 +22,23 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+          cache: 'pip'
 
-      - name: Install Playwright system deps
+      - name: Install Playwright system deps (browsers)
         uses: microsoft/playwright-github-action@v1
 
-      - name: DEBUG Show requirements.txt
-        run: |
-          echo "==== REQUIREMENTS FILE ===="
-          cat requirements.txt
-
-
-      - name: Install dependencies and Playwright
+      - name: DEBUG show requirements.txt
         shell: pwsh
         run: |
-          python -m venv .venv
-          $python = ".\.venv\Scripts\python.exe"
+          if (Test-Path requirements.txt) { 
+            Write-Host "==== requirements.txt (workspace) ====" 
+            Get-Content requirements.txt 
+          } else { 
+            Write-Error "requirements.txt not found" 
+          }
 
-          # ⛔ Najważniejsze — aktualizacja pip przed wszystkim
-          & $python -m pip install --upgrade pip
-
-          # ⛔ Zakaz zmian pip podczas instalacji requirements
-          & $python -m pip install --no-deps --upgrade pip
-
-          # ⭕ Instalacja bibliotek bez modyfikacji pip
-          & $python -m pip install --no-build-isolation -r requirements.txt
-
-          # Instalacja Playwright CLI
-          & $python -m playwright install
-      
-
-      - name: Run tests
+      - name: Install Python dependencies
+        shell: pwsh
         run: |
-          pytest -vv -s --alluredir=allure-results || true
-        continue-on-error: true
+          python -m pip install --upgrade pip
+          # Zapobiegamy auto-aktualizacji pip podczas installa
