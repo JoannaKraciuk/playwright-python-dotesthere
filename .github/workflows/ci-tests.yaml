@@ -1,0 +1,49 @@
+name: Playwright Python Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        python-version: [3.12]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install
+
+      - name: Run tests with Allure results
+        run: |
+          source .venv/bin/activate
+          pytest -vv -s --alluredir allure-results || true
+        continue-on-error: true  # żeby workflow nie zatrzymywał się przy failed tests
+
+      - name: Generate Allure report
+        run: |
+          source .venv/bin/activate
+          allure generate allure-results -o allure-report --clean || true
+
+      - name: Upload Allure report as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: allure-report
