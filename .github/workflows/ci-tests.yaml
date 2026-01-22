@@ -28,9 +28,9 @@ jobs:
         run: |
           python -m venv .venv
           $python = ".\.venv\Scripts\python.exe"
-          # Zaktualizuj pip
+          # Zaktualizuj pip przed instalacją pakietów
           & $python -m pip install --upgrade pip
-          # Zainstaluj wszystkie zależności wymuszając reinstalację
+          # Zainstaluj pakiety z requirements.txt (bez pip)
           & $python -m pip install --force-reinstall --no-cache-dir -r requirements.txt
           # Teraz zainstaluj Playwright CLI
           & $python -m playwright install
