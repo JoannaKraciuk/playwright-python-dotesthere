@@ -1,3 +1,4 @@
+
 name: Playwright Python Tests
 
 on:
@@ -23,22 +24,21 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies and Playwright
-        shell: pwsh
+      - name: Install Playwright system deps
+        uses: microsoft/playwright-github-action@v1
+
+      - name: DEBUG Show requirements.txt
         run: |
-          python -m venv .venv
-          $python = ".\.venv\Scripts\python.exe"
-          # Zaktualizuj pip przed instalacją pakietów
-          & $python -m pip install --upgrade pip
-          # Zainstaluj pakiety z requirements.txt (bez pip)
-          & $python -m pip install --force-reinstall --no-cache-dir -r requirements.txt
-          # Teraz zainstaluj Playwright CLI
-          & $python -m playwright install
+          echo "==== REQUIREMENTS FILE ===="
+          cat requirements.txt
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install
 
       - name: Run tests
-        shell: pwsh
         run: |
-          .\.venv\Scripts\python.exe -m pytest -vv -s --alluredir allure-results || true
+          pytest -vv -s --alluredir=allure-results || true
         continue-on-error: true
-
-      - name: Generate Allure re
