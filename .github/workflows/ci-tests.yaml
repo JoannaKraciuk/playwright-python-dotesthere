@@ -50,18 +50,17 @@ jobs:
           $zip = "$env:RUNNER_TEMP\allure.zip"
           $installDir = "$env:RUNNER_TEMP\allure"
 
-          # Pobierz Allure
           Invoke-WebRequest -Uri "https://github.com/allure-framework/allure2/releases/download/$version/allure-$version.zip" -OutFile $zip
-
-          # Rozpakuj
           Expand-Archive -Path $zip -DestinationPath $installDir
 
-          # Dodaj do PATH tylko w tym kroku
-          $env:PATH = "$installDir\allure-$version\bin;$env:PATH"
+          # Ścieżka do pliku batch
+          $allureCmd = Join-Path "$installDir\allure-$version\bin" "allure.bat"
 
           # Sprawdź wersję
-          allure --version
-      
+          & $allureCmd --version
+
+          # Zmienna do późniejszego użycia
+          echo "ALLURE_CMD=$allureCmd" >> $env:GITHUB_ENV
 
       - name: Generate Allure HTML report
         if: always()
