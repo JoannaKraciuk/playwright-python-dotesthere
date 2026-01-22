@@ -59,14 +59,14 @@ jobs:
           # Sprawdź wersję
           & $allureCmd --version
 
-          # Zmienna do późniejszego użycia
+          # Zapisz zmienną środowiskową dla kolejnych kroków
           echo "ALLURE_CMD=$allureCmd" >> $env:GITHUB_ENV
 
       - name: Generate Allure HTML report
         if: always()
         shell: pwsh
         run: |
-          allure generate allure-results -o allure-report --clean
+          & $env:ALLURE_CMD generate allure-results -o allure-report --clean
 
       - name: Upload Allure HTML report
         uses: actions/upload-artifact@v4
