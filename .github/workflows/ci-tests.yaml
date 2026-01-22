@@ -44,17 +44,22 @@ jobs:
           if-no-files-found: ignore
 
       - name: Install Allure CLI
-        if: always()
         shell: pwsh
         run: |
           $version = "2.29.0"
-          Invoke-WebRequest `
-            -Uri "https://github.com/allure-framework/allure2/releases/download/$version/allure-$version.zip" `
-            -OutFile "allure.zip"
+          $zip = "$env:RUNNER_TEMP\allure.zip"
+          $installDir = "$env:RUNNER_TEMP\allure"
 
-          Expand-Archive allure.zip -DestinationPath "$env:RUNNER_TEMP\allure"
-          "$env:RUNNER_TEMP\allure\allure-$version\bin" >> $env:GITHUB_PATH
+          # Pobierz Allure
+          Invoke-WebRequest -Uri "https://github.com/allure-framework/allure2/releases/download/$version/allure-$version.zip" -OutFile $zip
 
+          # Rozpakuj
+          Expand-Archive -Path $zip -DestinationPath $installDir
+
+          # Dodaj do PATH tylko w tym kroku
+          $env:PATH = "$installDir\allure-$version\bin;$env:PATH"
+
+          # Sprawdź wersję
           allure --version
       
 
