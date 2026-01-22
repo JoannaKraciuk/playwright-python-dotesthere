@@ -1,4 +1,3 @@
-
 import os
 import pytest
 import allure
@@ -13,17 +12,19 @@ from pages.sorting_page import SortingPage
 from pages.upload_page import UploadPage
 from pages.dynamic_content_page import DynamicContentPage
 
+# Tworzymy foldery na screenshoty i artefakty
 os.makedirs("screenshots", exist_ok=True)
+os.makedirs("traces", exist_ok=True)
+os.makedirs("videos", exist_ok=True)
+
 # --- Konfiguracja bazowych URL ---
 @pytest.fixture(scope="session")
 def base_url() -> str:
     return os.getenv("BASE_URL", "https://dotesthere.com")
 
-
 @pytest.fixture(scope="session")
 def api_base_url() -> str:
     return os.getenv("API_BASE_URL", "https://dotesthere.com/api")
-
 
 # --- Playwright / Browser ---
 @pytest.fixture(scope="session")
@@ -31,20 +32,15 @@ def _pw():
     with sync_playwright() as p:
         yield p
 
-
-
 @pytest.fixture(scope="session")
 def browser(_pw):
     browser = _pw.chromium.launch(headless=False, slow_mo=800)  # zawsze headed
     yield browser
     browser.close()
 
-
-
 # --- Context / Page ---
 @pytest.fixture
 def context(browser, request):
-    # Nagrywanie wideo do katalogu "videos"
     context = browser.new_context(
         record_video_dir="videos",
         record_video_size={"width": 1280, "height": 720},
@@ -58,10 +54,7 @@ def context(browser, request):
         sources=True,
     )
     yield context
-
-    # Wideo materializuje się dopiero po close()
     context.close()
-
 
 @pytest.fixture
 def page(context):
@@ -69,7 +62,7 @@ def page(context):
     yield p
     p.close()
 
-
+# --- Page Object Model Fixtures ---
 @pytest.fixture
 def login_page(page):
     return LoginPage(page)
@@ -98,9 +91,12 @@ def sorting_page(page):
 def dynamic_content_page(page):
     return DynamicContentPage(page)
 
+# --- Hook do raportowania fail / artefaktów ---
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):
-
+    """
+    Dodaje screenshoty i trace do raportu Allure przy fail
+    """
     outcome = yield
     rep = outcome.get_result()
 
@@ -110,36 +106,31 @@ def pytest_runtest_makereport(item):
     page = item.funcargs.get("page")
     context = item.funcargs.get("context")
 
-    # Unikalna i bezpieczna nazwa artefaktów
+    # Bezpieczna nazwa artefaktu
     safe_name = (
-        item.nodeid
-        .replace("::", "_")
-        .replace("/", "_")
-        .replace("\\", "_")
+        item.nodeid.replace("::", "_").replace("/", "_").replace("\\", "_")
     )
-
-    # Katalogi na pliki
-    os.makedirs("traces", exist_ok=True)
 
     # --- FAIL ---
     if rep.failed:
-        os.makedirs("traces", exist_ok=True)
-
         if context:
             trace_path = f"traces/{safe_name}.zip"
-
             context.tracing.stop(path=trace_path)
+            allure.attach.file(trace_path, name="Playwright Trace", extension=".zip")
 
+        if page:
+            # screenshot przy fail
+            screenshot_path = f"screenshots/{safe_name}.png"
+            page.screenshot(path=screenshot_path)
             allure.attach.file(
-                trace_path,
-                name="Playwright Trace",
-                extension=".zip",
+                screenshot_path,
+                name="Screenshot on Fail",
+                attachment_type=allure.attachment_type.PNG,
             )
-    # -------- PASS --------
     else:
+        # --- PASS ---
         if context:
             context.tracing.stop()
-
         if page and page.video:
             try:
                 os.remove(page.video.path())

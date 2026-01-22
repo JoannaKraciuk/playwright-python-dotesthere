@@ -33,7 +33,6 @@ pytest-playwright
 playwright
 allure-pytest
 ```
-
 ✅ Struktura projektu
 ```text
 playwright-python-dotesthere/
