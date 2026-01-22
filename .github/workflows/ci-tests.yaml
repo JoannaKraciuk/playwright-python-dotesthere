@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          retry: 3
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -19,7 +22,6 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      # Systemowe zależności Playwright (Windows)
       - name: Install Playwright system deps
         uses: microsoft/playwright-github-action@v1
 
@@ -33,7 +35,13 @@ jobs:
       - name: Run Playwright tests
         shell: pwsh
         run: |
-          pytest -vv -s --alluredir=allure-results || echo "Tests failed"
+          pytest -vv -s \
+            --alluredir=allure-results \
+            --browser=chromium \
+            --output=test-results \
+            --screenshot=only-on-failure \
+            --video=retain-on-failure \
+            --tracing=retain-on-failure || echo "Tests failed"
 
       - name: Upload Allure results
         uses: actions/upload-artifact@v4
@@ -53,13 +61,8 @@ jobs:
           Invoke-WebRequest -Uri "https://github.com/allure-framework/allure2/releases/download/$version/allure-$version.zip" -OutFile $zip
           Expand-Archive -Path $zip -DestinationPath $installDir
 
-          # Ścieżka do pliku batch
           $allureCmd = Join-Path "$installDir\allure-$version\bin" "allure.bat"
-
-          # Sprawdź wersję
           & $allureCmd --version
-
-          # Zapisz zmienną środowiskową dla kolejnych kroków
           echo "ALLURE_CMD=$allureCmd" >> $env:GITHUB_ENV
 
       - name: Generate Allure HTML report
