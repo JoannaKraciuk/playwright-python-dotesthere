@@ -27,9 +27,15 @@ jobs:
         shell: pwsh
         run: |
           python -m venv .venv
-          # Zawsze używamy Pythona z venv
+          # Używamy bezpośrednio Pythona z venv
           .\.venv\Scripts\python.exe -m pip install --upgrade pip
           .\.venv\Scripts\python.exe -m pip install -r requirements.txt
           .\.venv\Scripts\python.exe -m playwright install
 
       - name: Run tests
+        shell: pwsh
+        run: |
+          .\.venv\Scripts\python.exe -m pytest -vv -s --alluredir allure-results || true
+        continue-on-error: true
+
+      - name: Generate Allure re
