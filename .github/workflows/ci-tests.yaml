@@ -24,14 +24,16 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
+        shell: pwsh
         run: |
           python -m venv .venv
+          # Aktywacja środowiska w PowerShell
           .\.venv\Scripts\Activate.ps1
           pip install --upgrade pip
           pip install -r requirements.txt
-          # Playwright CLI poprzez python -m
+          # Teraz Playwright będzie zainstalowany i dostępny
           python -m playwright install
-        shell: pwsh
+      
 
       - name: Run tests with Allure results
         run: |
