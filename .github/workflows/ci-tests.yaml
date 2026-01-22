@@ -32,11 +32,25 @@ jobs:
           echo "==== REQUIREMENTS FILE ===="
           cat requirements.txt
 
-      - name: Install Python dependencies
+
+      - name: Install dependencies and Playwright
+        shell: pwsh
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          playwright install
+          python -m venv .venv
+          $python = ".\.venv\Scripts\python.exe"
+
+          # ⛔ Najważniejsze — aktualizacja pip przed wszystkim
+          & $python -m pip install --upgrade pip
+
+          # ⛔ Zakaz zmian pip podczas instalacji requirements
+          & $python -m pip install --no-deps --upgrade pip
+
+          # ⭕ Instalacja bibliotek bez modyfikacji pip
+          & $python -m pip install --no-build-isolation -r requirements.txt
+
+          # Instalacja Playwright CLI
+          & $python -m playwright install
+      
 
       - name: Run tests
         run: |
