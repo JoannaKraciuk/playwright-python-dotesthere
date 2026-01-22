@@ -31,16 +31,12 @@ jobs:
           pip install -r requirements.txt
           python -m playwright install
 
+
       - name: Run tests
         shell: pwsh
         run: |
-          pytest -vv -s ^
-            --browser=chromium ^
-            --output=test-results ^
-            --screenshot=only-on-failure ^
-            --video=retain-on-failure ^
-            --tracing=retain-on-failure ^
-            --alluredir=allure-results || echo "Tests failed"
+          pytest -vv -s --browser=chromium --output=test-results --screenshot=only-on-failure --video=retain-on-failure --tracing=retain-on-failure --alluredir=allure-results || echo "Tests failed"
+      
       
 
       - name: Run tests
