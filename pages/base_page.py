@@ -6,7 +6,7 @@ from playwright.sync_api import Page, Locator, expect
 class BasePage:
     BASE_URL = "https://dotesthere.com/"
 
-    def __init__(self, page: Page, default_timeout_ms: int = 5000):
+    def __init__(self, page: Page, default_timeout_ms: int = 10000):
         self.page = page
         self.page.set_default_timeout(default_timeout_ms)
 
@@ -101,3 +101,7 @@ class BasePage:
     def read_toast(self) -> str:
         expect(self.toast).to_be_visible()
         return self.toast.inner_text().strip()
+
+    def wait_toast_disappear(self, timeout_ms: int = 5000):
+        expect(self.toast).to_be_hidden(timeout=timeout_ms)
+

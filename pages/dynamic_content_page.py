@@ -8,14 +8,14 @@ class DynamicContentPage(BasePage):
         self.page: Page = page
 
         self.refresh_btn: Locator   = self.page.get_by_role('button', name='Refresh Content')
-        self.dynamic_content: Locator = self.page.locator('div.content-row > p')
+        self.dynamic_content: Locator = self.page.locator('div.content-row > p').first
 
     @property
-    def refresh_button(self):
+    def refresh_button(self) -> Locator:
         return self.refresh_btn
 
     @property
-    def dynamic_text(self):
+    def dynamic_text(self) -> Locator:
         return self.dynamic_content
 
     @property
@@ -23,20 +23,20 @@ class DynamicContentPage(BasePage):
         return self.read_toast
 
     def click_change_and_get_text(self):
-        self.click(self.refresh_button)
-        self.wait_visible(self.dynamic_text)
+        before = self.click(self.refresh_button)
+        expect(self.dynamic_text).not_to_have_text(before, timeout=10000)
         return self.dynamic_text.inner_text()
 
     def double_click_refresh(self):
+        before = self.refresh_button.inner_text()
         self.refresh_button.dblclick()
-        self.wait_visible(self.dynamic_text)
+        expect(self.dynamic_text).not_to_have_text(before, timeout=10000)
         return self.dynamic_text.inner_text()
 
-    def multi_click_refresh(self, times: int = 5, delay: float = 0.1):
-        import time
-        for i in range(times):
-            self.click(self.refresh_button)
-            if delay > 0:
-                time.sleep(delay)
-        self.wait_visible(self.dynamic_text)
+    def multi_click_refresh(self, times: int = 5, delay: float = 0.1) -> str:
+        before = self.dynamic_text.inner_text()
+        for _ in range(times):
+            self.refresh_button.click()
+            self.page.wait_for_timeout(int(delay * 1000))
+        expect(self.dynamic_text).not_to_have_text(before, timeout=10000)
         return self.dynamic_text.inner_text()

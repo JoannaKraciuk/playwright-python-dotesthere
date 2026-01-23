@@ -16,6 +16,7 @@ class ElementsPage(BasePage):
 
     def delete_element(self):
         self.click(self.add_btn)
+        self.wait_toast_disappear()
         self.click(self.delete_btn)
         self.wait_visible(self.toast)
         return self.get_text(self.toast)
