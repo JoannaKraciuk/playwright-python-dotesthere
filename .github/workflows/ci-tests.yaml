@@ -42,12 +42,12 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path tests | Out-Null
           @'
-import allure
-
-def test_allure_smoke():
-    with allure.step("Step: smoke"):
-        assert True
-'@ | Set-Content -Path tests\test_allure_smoke.py -Encoding UTF8
+          import allure
+          
+          def test_allure_smoke():
+              with allure.step("Step: smoke"):
+                  assert True
+          '@ | Set-Content -Path tests\test_allure_smoke.py -Encoding UTF8
 
       # 4) Pokaż co pytest zbierze – musi być co najmniej 1 test
       - name: DEBUG – pytest collect-only
