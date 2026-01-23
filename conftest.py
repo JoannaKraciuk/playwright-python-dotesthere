@@ -34,7 +34,7 @@ def _pw():
 
 @pytest.fixture(scope="session")
 def browser(_pw):
-    browser = _pw.chromium.launch(headless=False, slow_mo=800)  # zawsze headed
+    browser = _pw.chromium.launch(headless=True)  # zawsze headed
     yield browser
     browser.close()
 
