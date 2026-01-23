@@ -34,12 +34,44 @@ jobs:
           }
 
 
+
+      - name: DEBUG – Python & pytest environment
+        shell: pwsh
+        run: |
+          python --version
+          pip --version
+          pip list
+          echo "---- pytest version & plugins ----"
+          pytest --version
+          echo "---- pytest plugins ----"
+          pytest --fixtures -q > $env:RUNNER_TEMP\fixtures.txt 2>$null
+          type $env:RUNNER_TEMP\fixtures.txt | Select-String -Pattern "allure" -Context 0,2
+
+      - name: DEBUG – repo tree & pytest.ini
+        shell: pwsh
+        run: |
+          echo "---- repo root ----"
+          Get-ChildItem -Recurse -File | Select-Object FullName
+          if (Test-Path "pytest.ini") { 
+            echo "---- pytest.ini ----"
+            Get-Content pytest.ini 
+          } else { 
+            echo "pytest.ini not found" 
+          }
+
+      - name: DEBUG – dry-run to see collected tests
+        shell: pwsh
+        run: |
+          echo "---- pytest --collect-only ----"
+          pytest --collect-only -q || exit 0
+
+
       - name: Run Playwright tests
         shell: pwsh
         run: |
           if (!(Test-Path "allure-results")) { New-Item -ItemType Directory -Path "allure-results" }
           pytest -vv -s --alluredir=allure-results
-      
+          
 
       - name: DEBUG – list allure-results
         if: always()
@@ -87,3 +119,35 @@ jobs:
           name: allure-report
           path: allure-report
           if-no-files-found: error
+
+
+
+      - name: DEBUG – Python & pytest environment
+        shell: pwsh
+        run: |
+          python --version
+          pip --version
+          pip list
+          echo "---- pytest version & plugins ----"
+          pytest --version
+          echo "---- pytest plugins ----"
+          pytest --fixtures -q > $env:RUNNER_TEMP\fixtures.txt 2>$null
+          type $env:RUNNER_TEMP\fixtures.txt | Select-String -Pattern "allure" -Context 0,2
+
+      - name: DEBUG – repo tree & pytest.ini
+        shell: pwsh
+        run: |
+          echo "---- repo root ----"
+          Get-ChildItem -Recurse -File | Select-Object FullName
+          if (Test-Path "pytest.ini") { 
+            echo "---- pytest.ini ----"
+            Get-Content pytest.ini 
+          } else { 
+            echo "pytest.ini not found" 
+          }
+
+      - name: DEBUG – dry-run to see collected tests
+        shell: pwsh
+        run: |
+          echo "---- pytest --collect-only ----"
+          pytest --collect-only -q || exit 0
