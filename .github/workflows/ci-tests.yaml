@@ -36,11 +36,11 @@ jobs:
                   assert True
           EOF
 
-      - name: Pytest run
+      - name: Run pytest and generate allure-results
         run: |
           pytest --alluredir=allure-results .
 
-      - name: List allure-results
+      - name: DEBUG – list allure-results
         run: |
           echo "=== allure-results ==="
           ls -R allure-results
@@ -49,45 +49,16 @@ jobs:
         run: |
           VERSION=2.29.0
           wget https://github.com/allure-framework/allure2/releases/download/$VERSION/allure-$VERSION.zip -O allure.zip
-          unzip allure.zip
+          unzip -q allure.zip
           echo "ALLURE_BIN=$(pwd)/allure-$VERSION/bin/allure" >> $GITHUB_ENV
-
-
-      - name: DEBUG – print absolute paths
-        if: always()
-        run: |
-          echo "PWD:"
-          pwd
-          echo "Absolute allure-results:"
-          realpath allure-results || echo "realpath not available"
-          echo "Files:"
-          ls -R .
-          
-
-      - name: DEBUG – show working directory
-        run: |
-          echo "PWD:"
-          pwd
-          echo "Files:"
-          ls -R .
-
-
 
       - name: Generate Allure HTML report
         run: |
-          & "$env:ALLURE_CMD" generate "$PWD\allure-results" -o "$PWD\allure-report" --clean
-          
-
-      - name: Generate Allure Report (Ubuntu)
-        run: |
           RESULTS_DIR="$(pwd)/allure-results"
           REPORT_DIR="$(pwd)/allure-report"
-      
           echo "Using results in: $RESULTS_DIR"
           echo "Generating report to: $REPORT_DIR"
-      
-          $ALLURE generate "$RESULTS_DIR" -o "$REPORT_DIR" --clean
-
+          "$ALLURE_BIN" generate "$RESULTS_DIR" -o "$REPORT_DIR" --clean
 
       - name: Upload Allure results
         uses: actions/upload-artifact@v4
