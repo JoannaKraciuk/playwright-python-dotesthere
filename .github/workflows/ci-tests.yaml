@@ -52,9 +52,42 @@ jobs:
           unzip allure.zip
           echo "ALLURE_BIN=$(pwd)/allure-$VERSION/bin/allure" >> $GITHUB_ENV
 
+
+      - name: DEBUG – print absolute paths
+        if: always()
+        run: |
+          echo "PWD:"
+          pwd
+          echo "Absolute allure-results:"
+          realpath allure-results || echo "realpath not available"
+          echo "Files:"
+          ls -R .
+          
+
+      - name: DEBUG – show working directory
+        run: |
+          echo "PWD:"
+          pwd
+          echo "Files:"
+          ls -R .
+
+
+
       - name: Generate Allure HTML report
         run: |
-          $ALLURE_BIN generate allure-results -o allure-report --clean
+          & "$env:ALLURE_CMD" generate "$PWD\allure-results" -o "$PWD\allure-report" --clean
+          
+
+      - name: Generate Allure Report (Ubuntu)
+        run: |
+          RESULTS_DIR="$(pwd)/allure-results"
+          REPORT_DIR="$(pwd)/allure-report"
+      
+          echo "Using results in: $RESULTS_DIR"
+          echo "Generating report to: $REPORT_DIR"
+      
+          $ALLURE generate "$RESULTS_DIR" -o "$REPORT_DIR" --clean
+
 
       - name: Upload Allure results
         uses: actions/upload-artifact@v4
