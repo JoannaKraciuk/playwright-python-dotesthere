@@ -40,7 +40,7 @@ jobs:
             Get-ChildItem "allure-results" -Recurse
           } else {
             Write-Host "❌ allure-results folder does NOT exist"
-      }
+          }
 
       - name: Install Allure CLI (Windows)
         shell: pwsh
