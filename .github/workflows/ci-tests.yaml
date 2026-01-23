@@ -31,6 +31,17 @@ jobs:
         run: |
           pytest -vv -s --alluredir=allure-results || echo "Tests failed"
 
+      - name: DEBUG – list allure-results
+        if: always()
+        shell: pwsh
+        run: |
+          Write-Host "=== allure-results content ==="
+          if (Test-Path "allure-results") {
+            Get-ChildItem "allure-results" -Recurse
+          } else {
+            Write-Host "❌ allure-results folder does NOT exist"
+      }
+
       - name: Install Allure CLI (Windows)
         shell: pwsh
         run: |
