@@ -71,3 +71,63 @@ jobs:
         with:
           name: allure-report
           path: allure-report
+
+
+      - name: Ensure Java (JRE) is installed
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y default-jre
+          java -version
+
+      - name: Install Allure CLI
+        run: |
+          set -e
+          VERSION=2.29.0
+          wget -q https://github.com/allure-framework/allure2/releases/download/$VERSION/allure-$VERSION.zip -O allure.zip
+          unzip -q allure.zip
+          echo "ALLURE_BIN=$(pwd)/allure-$VERSION/bin/allure" >> $GITHUB_ENV
+
+      - name: Verify Allure CLI
+        run: |
+          echo "ALLURE_BIN: $ALLURE_BIN"
+          test -x "$ALLURE_BIN" || (echo "❌ Allure CLI is not executable" && exit 1)
+          "$ALLURE_BIN" --version
+
+      - name: DEBUG – count allure jsons
+        run: |
+          echo "PWD: $(pwd)"
+          echo "Listing allure-results:"
+          ls -la allure-results || true
+          echo "JSON count:"
+          find "$(pwd)/allure-results" -type f -name "*.json" | wc -l
+
+      - name: Generate Allure HTML report
+        run: |
+          set -e
+          RESULTS_DIR="$(pwd)/allure-results"
+          REPORT_DIR="$(pwd)/allure-report"
+
+          if [ ! -d "$RESULTS_DIR" ]; then
+            echo "❌ Missing directory: $RESULTS_DIR"
+            exit 1
+          fi
+
+          JSON_COUNT=$(find "$RESULTS_DIR" -type f -name "*.json" | wc -l)
+          if [ "$JSON_COUNT" -eq 0 ]; then
+            echo "❌ No JSON files in $RESULTS_DIR – pytest did not produce allure results."
+            exit 1
+          fi
+
+          echo "Using results in: $RESULTS_DIR (jsons: $JSON_COUNT)"
+          "$ALLURE_BIN" generate "$RESULTS_DIR" -o "$REPORT_DIR" --clean
+
+          # twarde sprawdzenie, że raport powstał
+          if [ ! -f "$REPORT_DIR/index.html" ]; then
+            echo "❌ Allure report was not generated (index.html missing in $REPORT_DIR)"
+            echo "Report dir listing:"
+            ls -la "$REPORT_DIR" || true
+            exit 1
+          fi
+
+          echo "✅ Allure report generated at: $REPORT_DIR/index.html"
+
