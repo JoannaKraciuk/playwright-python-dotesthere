@@ -38,7 +38,7 @@ jobs:
 
       - name: Pytest run
         run: |
-          pytest --alluredir=allure-results .
+          pytest --alluredir=allure-results -v
 
       - name: List allure-results
         run: |
