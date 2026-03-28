@@ -76,7 +76,7 @@ jobs:
         run: |
           echo "Using allure from: $ALLURE_HOME"
           "$ALLURE_HOME/bin/allure" --version
-          "$ALLURE_HOME/bin/allure" generate --verbose allure-results -o allure-report --clean
+          "$ALLURE_HOME/bin/allure" generate allure-results -o allure-report --clean
 
       - name: Show allure-report content
         if: always()
