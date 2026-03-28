@@ -8,6 +8,8 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout repository
@@ -39,7 +41,17 @@ jobs:
         if: always()
         run: |
           ls -l allure-results
-          find allure-results -maxdepth 1 -type f -print -exec head -n 5 {} \;
+          find allure-results -maxdepth 1 -type f -name "*-result.json" -print -exec head -n 5 {} \;
+
+      - name: Verify allure results exist
+        if: always()
+        run: |
+          COUNT=$(find allure-results -maxdepth 1 -type f -name "*-result.json" | wc -l)
+          echo "Found $COUNT test result files"
+          if [ "$COUNT" -eq 0 ]; then
+            echo "No Allure result files found. Failing early to expose problem." >&2
+            exit 1
+          fi
 
       - name: Upload allure-results
         if: always()
