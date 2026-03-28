@@ -7,7 +7,6 @@ from pages.login_page import LoginPage
 from pages.dynamic_content_page import DynamicContentPage
 
 
-@pytest.mark.smoke
 @allure.epic("Dynamiczny tekst")
 @allure.feature("Dynamiczna zmiana tekstu")
 @allure.severity(allure.severity_level.NORMAL)

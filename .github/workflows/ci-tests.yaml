@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
       # 3. Install dependencies
       - name: Install minimal deps
@@ -32,12 +32,12 @@ jobs:
         run: |
           mkdir -p tests
           cat > tests/test_allure_smoke.py << 'EOF'
-import allure
 
-def test_allure_smoke():
-    with allure.step("Linux Allure step"):
-        assert True
-EOF
+        def test_allure_smoke():
+          with allure.step("Linux Allure step"):
+            assert True
+            EOF
+
 
       # 5. Run pytest wskazując katalog tests/ i generując allure-results
       - name: Pytest run
