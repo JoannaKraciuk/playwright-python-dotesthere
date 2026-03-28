@@ -35,6 +35,12 @@ jobs:
       - name: Run pytest (headless)
         run: pytest -vv --alluredir=allure-results
 
+      - name: Show allure-results content
+        if: always()
+        run: |
+          ls -l allure-results
+          find allure-results -maxdepth 1 -type f -print -exec head -n 5 {} \;
+
       - name: Upload allure-results
         if: always()
         uses: actions/upload-artifact@v4
@@ -47,13 +53,22 @@ jobs:
         if: always()
         run: |
           VERSION=2.29.0
+          ALLURE_HOME=${{ github.workspace }}/allure-${VERSION}
           curl -sL https://github.com/allure-framework/allure2/releases/download/${VERSION}/allure-${VERSION}.zip -o allure.zip
           unzip -q allure.zip
-          echo "${{ github.workspace }}/allure-${VERSION}/bin" >> $GITHUB_PATH
+          echo "ALLURE_HOME=$ALLURE_HOME" >> $GITHUB_ENV
+          echo "$ALLURE_HOME/bin" >> $GITHUB_PATH
 
       - name: Generate Allure HTML report
         if: always()
-        run: allure generate allure-results -o allure-report --clean
+        run: |
+          echo "Using allure from: $ALLURE_HOME"
+          "$ALLURE_HOME/bin/allure" generate allure-results -o allure-report --clean
+
+      - name: Show allure-report content
+        if: always()
+        run: |
+          ls -l allure-report || true
 
       - name: Upload Allure HTML report
         if: always()
