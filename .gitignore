@@ -1,0 +1,32 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual envs
+.venv/
+.env
+.env.*
+
+# Test caches
+.pytest_cache/
+tests/.pytest_cache/
+
+# Allure artifacts
+allure-results/
+allure-report/
+tests/api/allure-results/
+
+# Playwright artifacts
+videos/
+screenshots/
+traces/
+tests/videos/
+tests/screenshots/
+tests/traces/
+
+# IDE / tooling
+.idea/
+.vscode/
+.DS_Store
