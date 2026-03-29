@@ -6,8 +6,9 @@ Projekt pokazuje dobre praktyki w automatyzacji testów: POM (Page Object Model)
 ✅ Wymagania
 
 - Python 3.10+
-- Przeglądarki Playwright (playwright install)
+- Przeglądarki Playwright (`playwright install`)
 - (Opcjonalnie) Allure CLI do generowania raportów
+- Wersje zgodne z `requirements.txt` (piny aktualnie: pytest 8.1.1, playwright ~1.55, pytest-playwright 0.5.x, allure-pytest 2.13.5)
 
 ✅ Instalacja
 
@@ -28,10 +29,10 @@ playwright install
 
 Minimalny requirements.txt:
 ```text
-pytest
-pytest-playwright
-playwright
-allure-pytest
+pytest==8.1.1
+pytest-playwright>=0.5,<0.6
+playwright~=1.55.0
+allure-pytest==2.13.5
 ```
 ✅ Struktura projektu
 ```text
@@ -42,8 +43,8 @@ playwright-python-dotesthere/
 │   └─ test_login.py        # przykładowe testy logowania
 ├─ pages/                   # Page Object Model – klasy stron
 ├─ utils/                   # funkcje pomocnicze, np. logi i screenshoty
-├─ allure-results/          # generowane raporty Allure
-└─ allure-report/           # generowane raporty statyczne
+├─ allure-results/          # generowane raporty Allure (nie commitujemy)
+└─ allure-report/           # statyczny raport Allure (nie commitujemy)
 ```
 ✅ Uruchamianie testów
 
@@ -83,6 +84,16 @@ Jedna komenda (Windows PowerShell):
 python -m pytest -vv -s --alluredir allure-results; allure generate allure-results -o allure-report --clean; allure open allure-report
 ```
 
+✅ Artefakty i .gitignore
+- `allure-results/`, `allure-report/`, `screenshots/`, `videos/`, `traces/` są generowane w trakcie testów i wykluczone w `.gitignore`.
+- W CI wszystkie artefakty są przesyłane jako *Artifacts* oraz publikowane na GitHub Pages (poniżej).
+
+✅ Publiczny raport Allure (GitHub Pages)
+- Workflow `.github/workflows/ci-tests.yaml` po każdym runie pakuje `allure-report` i publikuje na GitHub Pages.
+- Po pierwszym uruchomieniu trzeba włączyć w repo: *Settings → Pages → Source: GitHub Actions*.
+- URL raportu pojawia się w kroku `Deploy to GitHub Pages` (`page_url`) oraz w środowisku `github-pages` w zakładce *Environments*.
+- Raport można przeglądać bez pobierania artefaktów.
+
 ✅ Uruchamianie z PyCharm
 
 Interpreter: .venv projektu
@@ -104,6 +115,8 @@ Parametryzacja testów: testy mogą działać dla różnych danych wejściowych 
 Logi i screenshoty: przy błędach generowane są screenshoty i logi, widoczne w raportach Allure.
 
 Czytelny kod: sensowne nazwy testów i funkcji, komentarze wyjaśniające krok testowy.
+
+CI: workflow przerywa się, jeśli po uruchomieniu `pytest` nie znajdzie żadnych plików `*-result.json` w `allure-results` – ułatwia to szybkie wykrycie problemu z generacją raportu.
 
 ✅ Przykłady raportów
 

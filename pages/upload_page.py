@@ -14,4 +14,3 @@ class UploadPage(BasePage):
         self.set_file(self.file_input, relative_path)
         self.click_and_wait_for_element(self.upload_button, self.upload_result)
         return self.upload_result.inner_text()
-    #koment
